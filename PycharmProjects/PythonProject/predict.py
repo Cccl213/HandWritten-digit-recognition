@@ -49,9 +49,9 @@ def predict(image_path):
 
     return pred
 
-if __name__ == '__main__':
-    result = predict('test.png')
-    print(f"预测数字: {result}")
+# if __name__ == '__main__':
+#     result = predict('test.png')
+#     print(f"预测数字: {result}")
 
 st.title("手写数字识别器")
 uploaded_file = st.file_uploader("上传一张手写数字图片", type=["png", "jpg", "jpeg"])
