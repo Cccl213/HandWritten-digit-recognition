@@ -7,6 +7,9 @@ import torch
 import torch.nn.functional as F
 from PIL import Image
 import streamlit as st
+import os   # ← 新增
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 class NET(torch.nn.Module):
     def __init__(self):
@@ -23,7 +26,8 @@ class NET(torch.nn.Module):
         return x
 
 model = NET()
-model.load_state_dict(torch.load('mnist_model.pth'))
+model_path = os.path.join(script_dir, 'mnist_model.pth')
+model.load_state_dict(torch.load(model_path, map_location='cpu'))
 model.eval()
 
 def predict(image_path):
@@ -49,17 +53,12 @@ if __name__ == '__main__':
     result = predict('test.png')
     print(f"预测数字: {result}")
 
-# ... (你的模型加载代码) ...
-# def predict(image_path): ... (你写好的预测函数)
-
 st.title("手写数字识别器")
 uploaded_file = st.file_uploader("上传一张手写数字图片", type=["png", "jpg", "jpeg"])
 
 if uploaded_file is not None:
-    # 保存上传的图片
     with open("temp.png", "wb") as f:
         f.write(uploaded_file.getbuffer())
 
-    # 预测并显示结果
     result = predict("temp.png")
     st.image(uploaded_file, caption=f'预测结果: **{result}**')
